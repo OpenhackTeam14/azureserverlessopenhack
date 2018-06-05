@@ -14,8 +14,7 @@ namespace RatingsApi
 
         public Rating()
         {
-            this.id = Guid.NewGuid();
-            this.timestamp = DateTime.UtcNow();
+            this.timestamp = DateTime.UtcNow;
         }
     }
 }
