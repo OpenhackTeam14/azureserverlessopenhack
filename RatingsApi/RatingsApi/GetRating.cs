@@ -19,7 +19,7 @@ namespace RatingsApi
                         databaseName: "ratingsapi",
                 collectionName: "ratings",
                 ConnectionStringSetting = "CosmosDb",
-                Id = "{Query.id}")] Rating rating)
+                Id = "{Query.ratingId}")] Rating rating)
         {
             // parse query parameter
             var ratingId = req.GetQueryNameValuePairs()
