@@ -1,5 +1,6 @@
 ﻿using System;
 
+
 namespace RatingsApi
 {
     public class Rating
