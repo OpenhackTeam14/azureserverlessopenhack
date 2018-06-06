@@ -35,7 +35,7 @@ namespace RatingsApi
             }
             catch (Exception ex)
             {
-                response = req.CreateResponse(HttpStatusCode.InternalServerError, "Invalid Request body");
+                return req.CreateResponse(HttpStatusCode.InternalServerError, "Invalid Request body");
             }
 
             try
