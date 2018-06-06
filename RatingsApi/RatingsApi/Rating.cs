@@ -12,10 +12,12 @@ namespace RatingsApi
         public string locationName { get; set; }
         public int rating { get; set; }
         public string userNotes { get; set; }
+        public string version { get; set; }
 
         public Rating()
         {
             this.timestamp = DateTime.UtcNow;
+            this.version = "v1";
         }
     }
 }
