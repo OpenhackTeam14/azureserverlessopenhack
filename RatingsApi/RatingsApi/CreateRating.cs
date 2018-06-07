@@ -76,6 +76,8 @@ namespace RatingsApi
             var sample = new Microsoft.ApplicationInsights.DataContracts.MetricTelemetry();
             sample.Name = "SentimentScore";
             sample.Sum = sentiments.documents[0].score;
+            sample.Properties.Add("ProductId", temp.productId.ToString());
+            sample.Properties.Add("RatingUrl", $"https://ratingsapiteam14.azurewebsites.net/api/GetRating?ratingId={temp.id}");
             telemetry.TrackMetric(sample);
 
 
