@@ -15,6 +15,9 @@ namespace RatingsApi
 {
     public static class CreateRating
     {
+
+        private static readonly HttpClient client = new HttpClient();
+
         [FunctionName("CreateRating")]
         public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequestMessage req,
             [DocumentDB(
@@ -40,7 +43,7 @@ namespace RatingsApi
 
             try
             {
-                GetObject("https://serverlessohlondonuser.azurewebsites.net/api/GetUser?userId=",temp.userId.ToString());
+                GetObject("https://serverlessohlondonuser.azurewebsites.net/api/GetUser?userId=", temp.userId.ToString());
 
             }
             catch (Exception ex)
@@ -54,10 +57,22 @@ namespace RatingsApi
             }
             catch (Exception ex)
             {
-                 return req.CreateResponse(HttpStatusCode.NotFound, $"No product found with id: {temp.productId}");
+                return req.CreateResponse(HttpStatusCode.NotFound, $"No product found with id: {temp.productId}");
             }
 
+            //Get Sentiment Score
+            var sentimentRequestBody = new { documents = new[] { new { language = "en", id = temp.id, text = temp.userNotes } } };
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+            client.DefaultRequestHeaders.Add("ContentType", "application/json");
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", System.Configuration.ConfigurationManager.AppSettings["CognitiveApiKey"]);
 
+            var sentimentResponse = client.PostAsJsonAsync("https://northeurope.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment", sentimentRequestBody).Result;
+            var sentiments = JsonConvert.DeserializeObject<SentimentScores>(sentimentResponse.Content.ReadAsStringAsync().Result);
+
+            temp.sentimentScore = sentiments.documents[0].score;
+            
+        
+        
             //Write to Cosmos
             document = temp;
             response = req.CreateResponse(HttpStatusCode.OK, temp);

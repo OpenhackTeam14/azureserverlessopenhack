@@ -1,0 +1,7 @@
+﻿{
+  "functions": [
+    "CreateRating",
+    "GetRating",
+    "GetRatings"
+  ]
+}
