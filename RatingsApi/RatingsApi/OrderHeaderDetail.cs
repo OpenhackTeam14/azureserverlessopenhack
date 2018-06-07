@@ -8,6 +8,24 @@ namespace RatingsApi
 {
     public class OrderHeaderDetail
     {
+        public OrderHeaderDetail()
+        {
+            id = Guid.NewGuid();
+            lineItems = new List<OrderLineItem>();
+        }
+
+        public Guid id
+        {
+            get;
+            set;
+        }
+
+        public List<OrderLineItem> lineItems
+        {
+            get;
+            set;
+        }
+
         public string ponumber
         {
             get;
@@ -39,18 +57,6 @@ namespace RatingsApi
         }
 
         public string locationpostcode
-        {
-            get;
-            set;
-        }
-
-        public string totalcost
-        {
-            get;
-            set;
-        }
-
-        public string totaltax
         {
             get;
             set;

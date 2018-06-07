@@ -35,7 +35,7 @@ namespace RatingsApi
             dynamic orderHeaderFile = null;
             dynamic orderProductLineFile =null;
             dynamic orderLineItemFile = null;
-            List<DetailedOrder> myOrder = new List<DetailedOrder>();
+            List<OrderHeaderDetail> myOrder = new List<OrderHeaderDetail>();
 
             foreach (var url in urls)
             {
@@ -61,17 +61,20 @@ namespace RatingsApi
 
             }
 
-            foreach (var order in orderLineItemFile as IEnumerable<OrderLineItem>)
+            foreach (var detail in orderHeaderFile as IEnumerable<OrderHeaderDetail>)
             {
-                foreach (var product in orderProductLineFile as IEnumerable<ProductLine>)
+                myOrder.Add(detail);
+                foreach (var order in orderLineItemFile as IEnumerable<OrderLineItem>)
                 {
-                    if (product.productid == order.productid)
+                    if (order.ponumber == detail.ponumber)
                     {
-                        foreach (var detail in orderHeaderFile as IEnumerable<OrderHeaderDetail>)
+                        detail.lineItems.Add(order);
+                        foreach (var product in orderProductLineFile as IEnumerable<ProductLine>)
                         {
-                            if (detail.ponumber == order.ponumber)
+                            if (order.productid == product.productid)
                             {
-                                myOrder.Add(new DetailedOrder(product, detail, order));
+                                order.productname = product.productname;
+                                order.productdescription = product.productdescription;
                             }
                         }
                     }

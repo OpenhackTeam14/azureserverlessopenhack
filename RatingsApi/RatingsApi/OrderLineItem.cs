@@ -21,6 +21,14 @@ namespace RatingsApi
             set;
         }
 
+        public string productname
+        {
+            get;
+            set;
+        }
+
+        public string productdescription { get; set; }
+
         public string quantity
         {
             get;
