@@ -59,18 +59,18 @@ namespace RatingsApi
                     orderLineItemFile = productCsvReader.GetRecords<OrderLineItem>().ToList();
                 }
 
-                foreach (var order in orderLineItemFile as IEnumerable<OrderLineItem>)
+            }
+            foreach (var order in orderLineItemFile as IEnumerable<OrderLineItem>)
+            {
+                foreach (var product in orderProductLineFile as IEnumerable<ProductLine>)
                 {
-                    foreach (var product in orderProductLineFile as IEnumerable<ProductLine>)
+                    if (product.productid == order.productid)
                     {
-                        if (product.productid == order.productid)
+                        foreach (var detail in orderHeaderFile as IEnumerable<OrderHeaderDetail>)
                         {
-                            foreach(var detail in orderHeaderFile as IEnumerable<OrderHeaderDetail>)
+                            if (detail.ponumber == order.ponumber)
                             {
-                                if (detail.ponumber == order.ponumber)
-                                {
-                                    myOrder.Add(new DetailedOrder(product, detail, order));
-                                }
+                                myOrder.Add(new DetailedOrder(product, detail, order));
                             }
                         }
                     }

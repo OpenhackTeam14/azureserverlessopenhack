@@ -44,13 +44,13 @@ namespace RatingsApi
             set;
         }
 
-        public double totalcost
+        public string totalcost
         {
             get;
             set;
         }
 
-        public double totaltax
+        public string totaltax
         {
             get;
             set;

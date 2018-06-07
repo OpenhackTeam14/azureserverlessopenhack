@@ -21,25 +21,25 @@ namespace RatingsApi
             set;
         }
 
-        public int quantity
+        public string quantity
         {
             get;
             set;
         }
 
-        public double unitcost
+        public string unitcost
         {
             get;
             set;
         }
 
-        public double totalcost
+        public string totalcost
         {
             get;
             set;
         }
 
-        public double totaltax
+        public string totaltax
         {
             get;
             set;
