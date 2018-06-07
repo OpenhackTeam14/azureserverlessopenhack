@@ -17,8 +17,6 @@ namespace RatingsApi
             Map(m => m.locationid).Name("locationid");
             Map(m => m.locationname).Name("locationname");
             Map(m => m.locationpostcode).Name("locationpostcode");
-            Map(m => m.totalcost).Name("totalcost");
-            Map(m => m.totaltax).Name("totaltax");
         }
     }
 }
