@@ -29,12 +29,13 @@ namespace RatingsApi
         private static DocumentClient client = new DocumentClient(new Uri(endpointUrl), authorizationKey);
 
         [FunctionName("CreateOrder")]
-        public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequestMessage req, TraceWriter log)
+        public static async Task<IEnumerable<DetailedOrder>> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
             var urls = req.Content.ReadAsAsync<List<Url>>().Result;
             dynamic orderHeaderFile = null;
             dynamic orderProductLineFile =null;
             dynamic orderLineItemFile = null;
+            List<DetailedOrder> myOrder = new List<DetailedOrder>();
 
             foreach (var url in urls)
             {
@@ -58,7 +59,6 @@ namespace RatingsApi
                     orderLineItemFile = productCsvReader.GetRecords<OrderLineItem>().ToList();
                 }
 
-                List<DetailedOrder> myOrder = new List<DetailedOrder>();
                 foreach (var order in orderLineItemFile as IEnumerable<OrderLineItem>)
                 {
                     foreach (var product in orderProductLineFile as IEnumerable<ProductLine>)
@@ -76,14 +76,8 @@ namespace RatingsApi
                     }
                 }
             }
-            try
-            {
 
-            }
-            catch (Exception ex)
-            {
-                return req.CreateResponse(HttpStatusCode.BadRequest, $"Cannot create document in CosmosDB: {ex.Message}");
-            }
+            return myOrder;
         }
 
         private static CsvReader GetFileContent(string url)
