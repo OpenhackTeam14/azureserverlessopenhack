@@ -10,6 +10,7 @@ namespace RatingsApi
     {
         public DetailedOrder(ProductLine productline, OrderHeaderDetail detailline, OrderLineItem orderline)
         {
+            id = Guid.NewGuid();
             productid = productline.productid;
             productname = productline.productname;
             productdescription = productline.productdescription;
@@ -23,6 +24,12 @@ namespace RatingsApi
             totaltax = detailline.totaltax;
             quantity = orderline.quantity;
             unitcost = orderline.unitcost;
+        }
+
+        public Guid id
+        {
+            get;
+            set;
         }
 
         public string ponumber
