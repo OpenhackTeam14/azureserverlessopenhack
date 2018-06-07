@@ -1,0 +1,6 @@
+﻿{
+  "IsEncrypted": false,
+  "Values": {
+    "CosmosDb": "AccountEndpoint=https://ratingsteam14sql.documents.azure.com:443/;AccountKey=41v89lOr7KdkDhseA2OA7rg1FKTrOQruhXLCmipYokcRw8ovo5qd0HVZAEcLoArOhHZP1gQqAq0GwUgmipupsw==;"
+  }
+}
