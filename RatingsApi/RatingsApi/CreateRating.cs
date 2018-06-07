@@ -10,6 +10,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Newtonsoft.Json;
+using Microsoft.ApplicationInsights;
 
 namespace RatingsApi
 {
@@ -17,6 +18,8 @@ namespace RatingsApi
     {
 
         private static readonly HttpClient client = new HttpClient();
+        private static TelemetryClient telemetry = new TelemetryClient();
+
 
         [FunctionName("CreateRating")]
         public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequestMessage req,
@@ -70,9 +73,12 @@ namespace RatingsApi
             var sentiments = JsonConvert.DeserializeObject<SentimentScores>(sentimentResponse.Content.ReadAsStringAsync().Result);
 
             temp.sentimentScore = sentiments.documents[0].score;
-            
-        
-        
+            var sample = new Microsoft.ApplicationInsights.DataContracts.MetricTelemetry();
+            sample.Name = "SentimentScore";
+            sample.Sum = sentiments.documents[0].score;
+            telemetry.TrackMetric(sample);
+
+
             //Write to Cosmos
             document = temp;
             response = req.CreateResponse(HttpStatusCode.OK, temp);
