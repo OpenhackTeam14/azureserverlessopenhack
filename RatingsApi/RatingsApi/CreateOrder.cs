@@ -29,7 +29,7 @@ namespace RatingsApi
         private static DocumentClient client = new DocumentClient(new Uri(endpointUrl), authorizationKey);
 
         [FunctionName("CreateOrder")]
-        public static async Task<IEnumerable<DetailedOrder>> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequestMessage req, TraceWriter log)
+        public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
             var urls = req.Content.ReadAsAsync<List<Url>>().Result;
             dynamic orderHeaderFile = null;
@@ -44,7 +44,7 @@ namespace RatingsApi
                 {
                     var productCsvReader = GetFileContent(url.url);
                     productCsvReader.Configuration.RegisterClassMap<OrderHeaderDetailMap>();
-                    orderHeaderFile = productCsvReader.GetRecords<OrderHeaderDetail>();
+                    orderHeaderFile = productCsvReader.GetRecords<OrderHeaderDetail>().ToList();
                 }
                 else if (fileType.Contains("ProductInformation"))
                 {
@@ -60,6 +60,7 @@ namespace RatingsApi
                 }
 
             }
+
             foreach (var order in orderLineItemFile as IEnumerable<OrderLineItem>)
             {
                 foreach (var product in orderProductLineFile as IEnumerable<ProductLine>)
@@ -77,7 +78,7 @@ namespace RatingsApi
                 }
             }
 
-            return myOrder;
+            return req.CreateResponse(HttpStatusCode.OK,  myOrder);
         }
 
         private static CsvReader GetFileContent(string url)
